@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Map.*;
 
 
-public class JsonDynamicFields extends Object implements Serializable{
+public class JsonDynamicFields extends Object implements Serializable, Cloneable{
 
   protected Map<String, String> properties = new HashMap<>();
 
@@ -33,6 +33,13 @@ public class JsonDynamicFields extends Object implements Serializable{
     }
 
     return true;
+  }
+
+  @Override
+  public JsonDynamicFields clone() {
+    JsonDynamicFields clone = new JsonDynamicFields();
+    clone.properties.putAll(this.properties);
+    return clone;
   }
 
 }
