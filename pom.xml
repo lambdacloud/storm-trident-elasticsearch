@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lambdacloud.streaming</groupId>
+    <groupId>com.lambdacloud.realtime.streaming</groupId>
     <artifactId>storm-elasticsearch</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.0.1</version>
     <name>Storm Trident Elasticsearch</name>
     <description>Trident API implementation for Elasticsearch</description>
 
@@ -22,6 +22,13 @@
         <guava.version>16.0.1</guava.version>
         <commons-lang3.version>3.3</commons-lang3.version>
     </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
     <build>
         <plugins>

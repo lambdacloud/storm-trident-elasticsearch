@@ -107,7 +107,7 @@ public class ESIndexMapState<T> implements IBackingMap<T> {
         public State makeState(Map conf, IMetricsContext iMetricsContext, int i, int i2) {
             Options options = new Options(conf);
             ESIndexMapState<OpaqueValue<T>> mapState = new ESIndexMapState<>(clientFactory.makeClient(conf), serializer, new BulkResponseHandler.LoggerResponseHandler(), options.reportError());
-            MapState ms  = OpaqueMap.build(new EnCachedMap(mapState, options.getCachedMapSize()));
+            MapState ms  = OpaqueMap.build(new ExtCachedMap(mapState, options.getCachedMapSize()));
             return new SnapshottableMap<OpaqueValue<T>>(ms, new Values(options.getGlobalKey()));
         }
     }
@@ -122,7 +122,7 @@ public class ESIndexMapState<T> implements IBackingMap<T> {
         public State makeState(Map conf, IMetricsContext iMetricsContext, int i, int i2) {
             Options options = new Options(conf);
             ESIndexMapState<TransactionalValue<T>> mapState = new ESIndexMapState<>(clientFactory.makeClient(conf), serializer, new BulkResponseHandler.LoggerResponseHandler(), options.reportError());
-            MapState<T> ms  = TransactionalMap.build(new EnCachedMap(mapState, options.getCachedMapSize()));
+            MapState<T> ms  = TransactionalMap.build(new ExtCachedMap(mapState, options.getCachedMapSize()));
             Values snapshotKey = new Values(options.getGlobalKey());
             return new SnapshottableMap<>(ms, snapshotKey);
         }
@@ -138,7 +138,7 @@ public class ESIndexMapState<T> implements IBackingMap<T> {
         public State makeState(Map conf, IMetricsContext iMetricsContext, int i, int i2) {
             Options options = new Options(conf);
             ESIndexMapState<T> mapState = new ESIndexMapState<>(clientFactory.makeClient(conf), serializer, new BulkResponseHandler.LoggerResponseHandler(), options.reportError());
-            MapState<T> ms  = NonTransactionalMap.build(new EnCachedMap<>(mapState, options.getCachedMapSize()));
+            MapState<T> ms  = NonTransactionalMap.build(new ExtCachedMap<>(mapState, options.getCachedMapSize()));
             return new SnapshottableMap<>(ms, new Values(options.getGlobalKey()));
         }
     }

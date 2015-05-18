@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2015. LambdaCloud
+ * All rights reserved.
+ */
+
 package com.github.fhuss.storm.elasticsearch.state;
 
 import storm.trident.state.map.IBackingMap;
@@ -14,11 +19,11 @@ import java.util.Map;
  * unchanged state
  * @author sky4star
  */
-public class EnCachedMap<T> implements IBackingMap<T> {
+public class ExtCachedMap<T> implements IBackingMap<T> {
   LRUMap<List<Object>, T> _cache;
   IBackingMap<T> _delegate;
 
-  public EnCachedMap(IBackingMap<T> delegate, int cacheSize) {
+  public ExtCachedMap(IBackingMap<T> delegate, int cacheSize) {
     _cache = new LRUMap<List<Object>, T>(cacheSize);
     _delegate = delegate;
   }
