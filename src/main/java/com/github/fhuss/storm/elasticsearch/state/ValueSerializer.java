@@ -27,6 +27,10 @@ public abstract class ValueSerializer<T> implements Serializable {
     protected static final ObjectMapper mapper = new ObjectMapper();
 
     public byte[] serialize(T o) throws IOException {
+        // Check if dynamic object
+        if (o instanceof JsonDynamicFields) {
+            return ((JsonDynamicFields)o).serialize();
+        }
         return mapper.writeValueAsBytes(o);
     }
 
@@ -45,6 +49,21 @@ public abstract class ValueSerializer<T> implements Serializable {
 
         @Override
         public T deserialize(byte[] value) throws IOException {
+            return deserializeBytes(value, type);
+        }
+
+        public T deserializeBytes(byte[] value, Class<T> type) throws IOException {
+            if (JsonDynamicFields.class.isAssignableFrom(type)) {
+                try {
+                    JsonDynamicFields t = (JsonDynamicFields)type.newInstance();
+                    t.deserialize(value);
+                    return (T)t;
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
             return mapper.readValue(value, type);
         }
     }
@@ -65,7 +84,22 @@ public abstract class ValueSerializer<T> implements Serializable {
         public TransactionalValue<T> deserialize(byte[] value) throws IOException {
             ObjectNode node = mapper.readValue(value, ObjectNode.class);
             byte[] bytes = mapper.writeValueAsBytes(node.get(FIELD_VAL));
-            return new TransactionalValue<>(node.get(FIELD_TXID).asLong(), mapper.readValue(bytes, type));
+            return new TransactionalValue<>(node.get(FIELD_TXID).asLong(), deserializeBytes(bytes, type));
+        }
+
+        public T deserializeBytes(byte[] value, Class<T> type) throws IOException {
+            if (JsonDynamicFields.class.isAssignableFrom(type)) {
+                try {
+                    JsonDynamicFields t = (JsonDynamicFields)type.newInstance();
+                    t.deserialize(value);
+                    return (T)t;
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            return mapper.readValue(value, type);
         }
     }
 
@@ -87,8 +121,23 @@ public abstract class ValueSerializer<T> implements Serializable {
             long currTxid = node.get(FIELD_CURR_TIXD).asLong();
             T val = mapper.readValue(mapper.writeValueAsBytes(node.get(FIELD_CURR)), type);
             JsonNode prevNode = node.get(FIELD_PREV);
-            T prev = (prevNode.isNull()) ? null : mapper.readValue(mapper.writeValueAsBytes(prevNode), type);
+            T prev = (prevNode.isNull()) ? null : deserializeBytes(mapper.writeValueAsBytes(prevNode), type);
             return new OpaqueValue<>(currTxid, val, prev);
+        }
+
+        public T deserializeBytes(byte[] value, Class<T> type) throws IOException {
+            if (JsonDynamicFields.class.isAssignableFrom(type)) {
+                try {
+                    JsonDynamicFields t = (JsonDynamicFields)type.newInstance();
+                    t.deserialize(value);
+                    return (T)t;
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            return mapper.readValue(value, type);
         }
     }
 }

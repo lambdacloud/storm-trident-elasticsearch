@@ -4,15 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-
-    <groupId>com.github.fhuss</groupId>
+    <groupId>com.lambdacloud.realtime.streaming</groupId>
     <artifactId>storm-elasticsearch</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.0.1</version>
     <name>Storm Trident Elasticsearch</name>
     <description>Trident API implementation for Elasticsearch</description>
 
@@ -36,30 +30,12 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <id>fhuss</id>
-            <name>Florian Hussonnois</name>
-            <email>florian.hussonnois@gmail.com</email>
-            <url>https://github.com/fhussonnois</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git@github.com:fhussonnois/storm-trident-elasticsearch.git</connection>
-        <developerConnection>scm:git:git@github.com:fhussonnois/storm-trident-elasticsearch.git</developerConnection>
-        <url>git@github.com:fhussonnois/storm-trident-elasticsearch.git</url>
-    </scm>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.3</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -79,7 +55,6 @@
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-core</artifactId>
             <version>${storm.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
