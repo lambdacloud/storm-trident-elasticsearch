@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.Map.*;
 
 
-public class JsonDynamicFields extends Object implements Serializable, Cloneable{
+public class JsonDynamicFields extends Object implements Serializable{
 
   protected Map<String, String> properties = new HashMap<>();
 
-  protected static final ObjectMapper mapper = new ObjectMapper();
+  protected ObjectMapper mapper = new ObjectMapper();
 
   public byte[] serialize() throws IOException {
     return mapper.writeValueAsBytes(properties);
