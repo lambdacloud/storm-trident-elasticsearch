@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * Modified from storm's {@ref storm.trident.state.map.CachedMap}. The different is this one will not update
- * unchanged state, only for JsonDynamicFields objects
+ * unchanged state
  * @author sky4star
  */
 public class ExtCachedMap<T> implements IBackingMap<T> {
@@ -26,22 +26,6 @@ public class ExtCachedMap<T> implements IBackingMap<T> {
   public ExtCachedMap(IBackingMap<T> delegate, int cacheSize) {
     _cache = new LRUMap<List<Object>, T>(cacheSize);
     _delegate = delegate;
-  }
-
-  private List<T> cloneJsonDynamicFieldObjs(List<T> list) {
-    List<T> result = new ArrayList<>();
-    for (T t : list) {
-      if (t == null) {
-        result.add(t);
-      } else if (JsonDynamicFields.class.isAssignableFrom(t.getClass())) {
-        JsonDynamicFields df = (JsonDynamicFields)t;
-        T clone = (T) df.clone();
-        result.add(clone);
-      } else {
-        result.add(t);
-      }
-    }
-    return result;
   }
 
   @Override
@@ -69,8 +53,7 @@ public class ExtCachedMap<T> implements IBackingMap<T> {
       ret.add(results.get(key));
     }
 
-    // Clone before return. If we return a reference, checking same phase in ExtCachedMap will always return true
-    return cloneJsonDynamicFieldObjs(ret);
+    return ret;
   }
 
   @Override
@@ -82,14 +65,8 @@ public class ExtCachedMap<T> implements IBackingMap<T> {
       List<Object> key = keys.get(i);
       T value = values.get(i);
 
-      // For JsonDynamicFields, we check if it is the same before update
-      if (JsonDynamicFields.class.isAssignableFrom(value.getClass())) {
-        if (_cache.get(key) == null
-            || !_cache.get(key).equals(value)) {
-          toUpdateKeys.add(key);
-          toUpdateValues.add(value);
-        }
-      } else {
+      if (_cache.get(key) == null
+          || !_cache.get(key).equals(value)) {
         toUpdateKeys.add(key);
         toUpdateValues.add(value);
       }
